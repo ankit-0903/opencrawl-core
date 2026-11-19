@@ -2,13 +2,14 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {randomBytes,randomUUID} from 'node:crypto';
 import {Readable} from 'node:stream';
-import {applicationDatabaseFixture} from './fixtures/application-database.mjs';
+import {applicationDatabaseFixture,postgresUrl} from './fixtures/application-database.mjs';
 import {memorySessionStore} from './session-store-fixture.mjs';
 import {createSessionIngest} from '../dist/src/sessions/ingest.mjs';
 import {createReplicasImport} from '../dist/src/integrations/replicas-import.mjs';
 import {replicasImportRequest} from '../dist/src/application/replicas-import-http.mjs';
 import {replicasApi} from '../dist/src/integrations/replicas-api.mjs';
 import {replicasEvents} from '../dist/src/integrations/replicas-events.mjs';
+const live=(name,options,fn)=>typeof options==='function'?test(name,{skip:!postgresUrl},options):test(name,{skip:!postgresUrl||Boolean(options?.skip),...options},fn);
 
 const principal={tenantId:'org_test',userId:'admin'},organization={id:randomUUID(),name:'Own Replicas'};
 const chat={chat_id:randomUUID(),workspace_id:randomUUID(),workspace_name:'Archived workspace',workspace_status:'archived',provider:'claude',title:'Historical example',created_at:'2026-10-01T00:00:00Z',updated_at:'2026-10-01T00:00:00Z'};
@@ -31,7 +32,7 @@ async function fixture(t,{failHandoff=false,answer,schedule=async()=>{}}={}){
 }
 const job=(id,owner=principal)=>({tenantId:owner.tenantId,id});
 async function advance(service,id,owner=principal){await service.advance(job(id,owner));return service.status(owner);}
-test('connect verifies read access and hands off before returning; checkpoint survives restart',async t=>{
+live('connect verifies read access and hands off before returning; checkpoint survives restart',async t=>{
   const jobs=[],f=await fixture(t,{schedule:async task=>jobs.push(task)});
   const {id,phase}=await f.service.action(principal,{action:'connect',apiKey:'private-org-key'});
   assert.equal(phase,'importing');assert.deepEqual(jobs,[job(id)]);assert.equal(f.calls.at(-1).searchParams.get('limit'),'1');
@@ -42,12 +43,12 @@ test('connect verifies read access and hands off before returning; checkpoint su
   const done=await advance(f.reopen(),id);assert.equal(done.phase,'complete');assert.equal(done.events,2);assert.equal(done.imported,1);
   assert.equal((await query()).rows[0].credential,null);
 });
-test('Temporal rejection rolls back the connection and credential',async t=>{
+live('Temporal rejection rolls back the connection and credential',async t=>{
   const f=await fixture(t,{schedule:async()=>{throw Error('Temporal unavailable');}});
   await assert.rejects(f.service.action(principal,{action:'connect',apiKey:'key'}),/Temporal unavailable/);
   assert.equal(await f.service.status(principal),null);
 });
-test('failed handoff retains its checkpoint; reconnect fences old activities',async t=>{
+live('failed handoff retains its checkpoint; reconnect fences old activities',async t=>{
   const f=await fixture(t,{failHandoff:true});const connect=()=>f.service.action(principal,{action:'connect',apiKey:'key'});
   const {id}=await connect();await assert.rejects(f.service.advance(job(id)),/queue unavailable/);
   assert.equal((await f.service.status(principal)).events,0);assert.equal((await advance(f.reopen(),id)).events,1);
@@ -55,7 +56,7 @@ test('failed handoff retains its checkpoint; reconnect fences old activities',as
   const resumed=await connect();assert.notEqual(resumed.id,id);assert.equal(resumed.events,1);
   assert.equal(await f.service.advance(job(id)),true);assert.equal((await advance(f.service,resumed.id)).events,2);
 });
-test('personal keys and upstream bodies never become accepted credentials or exposed error text',async t=>{
+live('personal keys and upstream bodies never become accepted credentials or exposed error text',async t=>{
   const database=await applicationDatabaseFixture(t),key=randomBytes(32);
   const service=createReplicasImport({database,key,ingest:async()=>{throw new Error('not allowed');},request:async()=>Response.json({organization,caller:'personal_api_key'})});
   await assert.rejects(service.action(principal,{action:'connect',apiKey:'secret'}),/organization API key/);assert.equal(await service.status(principal),null);
@@ -94,7 +95,7 @@ test('API schema preserves unknown envelope and event fields without injecting d
   const history={events:[{unexpected:'record',payload:null}],has_more:false,future:{a:1},senders:[{native:'sender'}]};
   assert.deepEqual(await replicasApi('key',async()=>Response.json(history)).history(chat),history);
 });
-test('every exported agent is imported; unreadable chats pause without skipping or completing',async t=>{
+live('every exported agent is imported; unreadable chats pause without skipping or completing',async t=>{
   let denied=true;const second={...chat,chat_id:randomUUID(),workspace_id:randomUUID(),provider:'muse'};
   const f=await fixture(t,{answer:url=>{
     if(url.pathname.endsWith('conversations'))return Response.json(url.searchParams.has('cursor')?{conversations:[second],total:2,next_cursor:null}:{conversations:[chat],total:2,next_cursor:'second-page'});
@@ -109,7 +110,7 @@ test('every exported agent is imported; unreadable chats pause without skipping 
   for(let i=0;i<5&&state.phase!=='complete';i++)state=await advance(f.service,state.id,principal);
   assert.equal(state.phase,'complete');assert.equal(state.processed,2);assert.equal(state.imported,2);assert.equal(state.events,2);assert.equal(state.pages,2);
 });
-test('repeated history cursors and transient failures cannot advance or duplicate a checkpoint',async t=>{
+live('repeated history cursors and transient failures cannot advance or duplicate a checkpoint',async t=>{
   let failure=false;
   const f=await fixture(t,{answer:url=>{
     if(url.pathname.endsWith('/history'))return failure?new Response('do not expose secret',{status:500}):Response.json({events:[event('one')],before_cursor:'same'});
@@ -118,7 +119,7 @@ test('repeated history cursors and transient failures cannot advance or duplicat
   await assert.rejects(advance(f.service,id,principal),/repeated a history cursor/);assert.equal((await f.service.status(principal)).events,1);
   failure=true;await assert.rejects(advance(f.service,id,principal),/could not read/);assert.equal((await f.service.status(principal)).events,1);assert.equal(f.handed.length,1);
 });
-test('the same Replicas chat imported into two tenants gets separate immutable paths and owners',async t=>{
+live('the same Replicas chat imported into two tenants gets separate immutable paths and owners',async t=>{
   const f=await fixture(t);
   for(const tenantId of ['org_a','org_b']){
     const owner={...principal,tenantId};let state=await f.service.action(owner,{action:'connect',apiKey:'key'});
@@ -127,7 +128,7 @@ test('the same Replicas chat imported into two tenants gets separate immutable p
   assert.equal(new Set(f.handed).size,4);assert.notEqual(f.handed[0].split('/users/')[0],f.handed[2].split('/users/')[0]);
 });
 
-test('full history round-trips through immutable ingest, search and the session library',async t=>{
+live('full history round-trips through immutable ingest, search and the session library',async t=>{
   const {mkdtemp,rm}=await import('node:fs/promises');const {tmpdir}=await import('node:os');const {join}=await import('node:path');const {pathToFileURL}=await import('node:url');
   const {gunzipSync}=await import('node:zlib');
   const {createSessionSearch}=await import('../dist/src/sessions/search.mjs');
@@ -166,7 +167,7 @@ test('full history round-trips through immutable ingest, search and the session 
   assert.equal((await library.list({...principal,tenantId:'outside'},{})).sessions.length,0);
 });
 
-test('a large page splits into durable batches and a partial handoff retries without losing records',async t=>{
+live('a large page splits into durable batches and a partial handoff retries without losing records',async t=>{
   const database=await applicationDatabaseFixture(t),store=memorySessionStore();const payload='x'.repeat(8*1024*1024);
   const history={events:[{type:'future-tool',payload:{output:payload}}],before_cursor:null};
   let calls=0,fail=true;const ingest=createSessionIngest({store,prefix:'large/v1',scheduleIndexing:async()=>{calls++;if(calls===2&&fail){fail=false;throw Error('second handoff failed');}}}).putBatch;
@@ -177,7 +178,7 @@ test('a large page splits into durable batches and a partial handoff retries wit
   assert.equal([...store.data.keys()].filter(k=>k.endsWith('.json.gz')).length,2);
 });
 
-test('duplicate catalog entries preserve their metadata while counting one distinct session',async t=>{
+live('duplicate catalog entries preserve their metadata while counting one distinct session',async t=>{
   const f=await fixture(t,{answer:url=>url.pathname.endsWith('conversations')?Response.json({conversations:[chat,{...chat,title:'Another catalog label',provider:'future-agent'}],total:2,next_cursor:null}):url.pathname.endsWith('history')?Response.json({events:[event('same native history')],before_cursor:null}):null});
   let status=await f.service.action(principal,{action:'connect',apiKey:'key'});
   for(let i=0;i<2;i++)status=await advance(f.service,status.id,principal);
@@ -227,7 +228,7 @@ test('an OpenCrawl storage denial retries without attributing it to the Replicas
   assert.equal(messages.length,1);assert.match(messages[0],/Team workspace visibility/);
 });
 
-test('a real Temporal worker completes a paginated import after the request ends',async t=>{
+live('a real Temporal worker completes a paginated import after the request ends',{skip:!postgresUrl||process.env.OPENCRAWL_TEST_TEMPORAL!=='1'},async t=>{
   const {TestWorkflowEnvironment}=await import('@temporalio/testing'),{Worker}=await import('@temporalio/worker');
   const {replicasActivities}=await import('../dist/src/sessions/temporal/replicas.mjs');
   const {sessionIndexingScheduler}=await import('../dist/src/sessions/temporal/client.mjs');

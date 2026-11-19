@@ -1,9 +1,9 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {applicationDatabaseFixture} from './fixtures/application-database.mjs';
+import {applicationDatabaseFixture,postgresUrl} from './fixtures/application-database.mjs';
 import {createSetupState} from '../dist/src/state/setup.mjs';
 
-test('setup PostgreSQL state isolates namespace, workspace and person and rejects stale writes',async t=>{
+test('setup PostgreSQL state isolates namespace, workspace and person and rejects stale writes',{skip:!postgresUrl},async t=>{
   const first=await applicationDatabaseFixture(t),second=await applicationDatabaseFixture(t);
   const a=createSetupState(first),b=createSetupState(second);await Promise.all([a.ready(),b.ready()]);
   const scope={tenantId:'workspace',userId:'alice'};
