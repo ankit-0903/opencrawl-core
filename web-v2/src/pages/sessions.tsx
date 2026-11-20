@@ -9,7 +9,7 @@ import {failureMessage, failureStatus, useLibraryMutation, useResource} from './
 import {consoleResourceKey, useConsoleAccessFailure, useConsoleModel} from '../data.tsx';
 
 const PAGE = 50, MAX = 500;
-export const sessionHarness = (value: string | null): SessionHarness | null => value === 'claude-code' || value === 'codex' || value === 'cursor' || value === 'grok-bot' || value === 'antigravity' || value === 'replicas' ? value : null;
+export const sessionHarness = (value: string | null): SessionHarness | null => value === 'claude-code' || value === 'codex' || value === 'cursor' || value === 'grok-bot' || value === 'antigravity' || value === 'replicas' || value === 'devin' ? value : null;
 export function sessionPath({userId, harness, sessionId}: SessionRef) {
   return '/sessions?' + new URLSearchParams({user: userId, harness, id: sessionId}).toString();
 }
@@ -120,7 +120,9 @@ function SessionList({adapter}: {adapter: LibraryAdapter}) {
     <ol className="oc-row-groups" aria-busy={loading || undefined}>{byDay(data.sessions, session => session.lastActivityAt).map(([day, items]) => <li key={day}>
       <h2 className="oc-row-group-label">{day}</h2>
       <ul className="oc-rows">{items.map(session => <li key={sessionPath(session)} className="oc-row-item"><div className="oc-row oc-row-with-host">
-        <Link to={sessionPath(session)} className="oc-row-title"><span>{session.title}</span><VisibilityBadge value={session.private}/></Link>
+        {session.historyCapture?<div className="oc-session-captures"><Link to={sessionPath(session)} className="oc-row-title"><span>{session.title}</span><VisibilityBadge value={session.private}/></Link>
+          <Link to={sessionPath(session.historyCapture)}>Replicas history</Link></div>:
+          <Link to={sessionPath(session)} className="oc-row-title"><span>{session.title}</span><VisibilityBadge value={session.private}/></Link>}
         <span className="oc-row-participants">{people(session).length ? people(session).map(person => <Link key={person.id} to={personPath(person)} title={`Show sessions with ${personName(person)}`}>{personName(person)}</Link>) : <span className="muted">Unknown</span>}{session.participantsTruncated && <span title="Additional participants are not shown">…</span>}</span>
         <span className="oc-row-optional">{harnessName(session.harness)}</span>
         <CaptureHostname session={session}/>
