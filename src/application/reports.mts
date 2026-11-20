@@ -40,7 +40,7 @@ interface UsageReportBase {
     sources: Array<{name: string; icon: string; account?: string | null; state: string; records: number | null; indexed: number | null; indexedSpecies?: NamedCount[]; lastSyncedAt: string | null; connectedBy?: string | null; units?: [string, string]; rows?: Array<{label: string; count: number}>}>;
     index: null | {sessionEvents: number | null; connectorDocuments: number | null; sources: NamedCount[]; searchMs: number | null; probes?: number[]};
   };
-  /** Measured value; absent until the workspace has been measured. */
+  /** Legacy compatibility field. Current reports return null. */
   value?: ValueReport | null;
   /** Agent-session tokens captured this billing period, when the deployment meters them. */
   capture?: {tokens: number; since: string} | null;
@@ -81,6 +81,8 @@ export interface BoardReport {
   next: number | null;
 }
 export interface ConsoleDataAdapter {
+  callTotals?(signal:AbortSignal):Promise<import('./search-activity.mjs').CallTotals & {cacheScope:string}>;
+  searchHistory?(input:import('./search-activity.mjs').HistoryRequest,signal:AbortSignal):Promise<import('./search-activity.mjs').SearchActivityPage & {cacheScope:string}>;
   usageHighlights?(signal: AbortSignal): Promise<UsageHighlights & {cacheScope: string}>;
   usageDetails?(signal: AbortSignal): Promise<UsageDetails & {cacheScope: string}>;
   usage(signal: AbortSignal): Promise<UsageReport>;

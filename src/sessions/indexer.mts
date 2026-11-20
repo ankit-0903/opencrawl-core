@@ -1,3 +1,4 @@
+import {expandReplicasPayload} from './replicas-payload.mjs';
 import type {Principal, SourceOptions, SessionBatch, Attachment, SessionEvent} from './types.mjs';
 import {parseJson} from './types.mjs';
 import type {DocumentItem} from '../search/types.mjs';
@@ -105,6 +106,7 @@ export function batchDocuments({prefix,key,batch,principal,visibility='team',eve
         timestamp:typeof event.timestamp==='string'?event.timestamp:null,receivedAt:batch.receivedAt,
         sequence:Number.isSafeInteger(event.sequence)?event.sequence:0,chunk,...participantProjection(event,batch),...(chunk===0?{capturedTokens,captureMode}:{}),text:chunks[chunk]!.text,sourceKey:key,
         passageVersion:PASSAGE_VERSION,textStart:chunks[chunk]!.start,textEnd:chunks[chunk]!.end,chunkCount:chunks.length,
+        ...((batch.harness==='claude-code'||batch.harness==='codex') && (batch.clientApp==='t3-code'||batch.clientApp==='conductor') ? {clientApp:batch.clientApp} : {}),
         ...(batch.title?{title:batch.title}:{}),
         nativeId:typeof event.nativeId==='string'?event.nativeId:null,parentId:event.parentId??null,turnId:event.turnId??null,
         toolCallId:projected.data?.call_id??projected.data?.tool_use_id??null,toolNames:[...names],host:batch.host??null,
@@ -216,7 +218,8 @@ export function createSessionPipeline({store,privacy,eventIdentities,prefix,sear
         if(control?.deletedAt)return {records:0,skipped:true};
         await writes.put(key+'.privacy-cleared',Buffer.from('1'),'text/plain');
       }
-      const docs=batchDocuments({prefix,key,batch,principal:scope,visibility:control?.visibility});
+      const expanded=await expandReplicasPayload(store,prefix,scope,key,batch);
+      const docs=batchDocuments({prefix,key,batch:expanded,principal:scope,visibility:control?.visibility});
       // Check the whole event before any chunk write. Receipt order, shorter
       // payloads and concurrent activities must never assemble mixed revisions.
       try {

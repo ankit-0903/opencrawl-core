@@ -1,12 +1,12 @@
 export type ArchivePin={url:string;sha256:string;metadataUrl:string;metadataSha256:string};
-export type PackageRelease={ref?:string;minimumHarnessVersion?:string;memoryImportSkill?:boolean;listingIcon?:boolean;harness:'claude-code'|'codex'|'cursor'|'antigravity';name:string;path:string;version:string;capabilities:string;captureAvailable:boolean;daemonHandoff:boolean;files?:Record<string,{sha:string;bytes:number}>;archives?:Record<string,ArchivePin>};
+export type PackageRelease={ref?:string;minimumHarnessVersion?:string;memoryImportSkill?:boolean;continueSkill?:boolean;listingIcon?:boolean;harness:'claude-code'|'codex'|'cursor'|'antigravity';name:string;path:string;version:string;capabilities:string;captureAvailable:boolean;daemonHandoff:boolean;files?:Record<string,{sha:string;bytes:number}>;archives?:Record<string,ArchivePin>};
 export type PluginRelease={repository:string;ref:string;schemaVersion:1;bindingSchemaVersion:1;packages:PackageRelease[]};
 
 // Reviewed immutable package inventory from the public plugins repository.
 // Update this pin only with matching capability and native acceptance evidence.
 export const pluginRelease:PluginRelease = {
   "repository": "getopencrawl/opencrawl-plugins",
-  "ref": "51004a8e68644af00ecf4cf56ec8bbea9fd15ee3",
+  "ref": "335991acf5e23c072b9874aa4d486fd82d3b37e2",
   "schemaVersion": 1,
   "bindingSchemaVersion": 1,
   "packages": [
@@ -14,181 +14,185 @@ export const pluginRelease:PluginRelease = {
       "harness": "claude-code",
       "name": "opencrawl-local-claude-code",
       "path": "local/claude-code",
-      "version": "0.2.2",
+      "version": "0.2.6",
       "capabilities": "capabilities.json",
       "captureAvailable": true,
       "daemonHandoff": true,
       "minimumHarnessVersion": "2.1.327",
       "archives": {
         "darwin-arm64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.2/opencrawl-local-claude-code-0.2.2-darwin-arm64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.2/opencrawl-local-claude-code-0.2.2-darwin-arm64.json",
-          "sha256": "88016ac882ef2a20d2db3477e3950db009073ddaf72b1dd58554faa5a34611c1",
-          "metadataSha256": "55fc89a3dc820834ff1512f6255ca6fc65f44f9ffc139cd783fbbd2315a4eefa"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.6/opencrawl-local-claude-code-0.2.6-darwin-arm64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.6/opencrawl-local-claude-code-0.2.6-darwin-arm64.json",
+          "sha256": "c1b17d9bbcc3fbfe4e9f0c8eaae9d5ddba0374166c3cdd9b18cc6319640be247",
+          "metadataSha256": "b875d967137ced725460b40089821f63143a9406a3c65e84aa08787c7e9bbfbd"
         },
         "darwin-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.2/opencrawl-local-claude-code-0.2.2-darwin-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.2/opencrawl-local-claude-code-0.2.2-darwin-x64.json",
-          "sha256": "b1710e5e4c7eaa3af5724eb71fc1825a1b45651b9b225169650589b387136cb0",
-          "metadataSha256": "65d0b123639c61752febe44fbe21d051fd15489320146d917e6f8b83e070e0f3"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.6/opencrawl-local-claude-code-0.2.6-darwin-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.6/opencrawl-local-claude-code-0.2.6-darwin-x64.json",
+          "sha256": "f580a0755a0d77c9f4e6aead2c3a93f40f5bf9b9f9e5adf40308f7e6bd6695f4",
+          "metadataSha256": "ec0d68e5c698af85fccdf965a7bfb9d89bc52dfce8367da4c0eab1a092228d50"
         },
         "linux-arm64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.2/opencrawl-local-claude-code-0.2.2-linux-arm64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.2/opencrawl-local-claude-code-0.2.2-linux-arm64.json",
-          "sha256": "9da8b47ce69279fc92f3d9c4b00f3eb7f07a9ede744f2130eb898ad2afc6e83a",
-          "metadataSha256": "62729878f8786a98dfc5de9394bc3c90131d99bcdb2e6fbe592ad0a38eba3fc7"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.6/opencrawl-local-claude-code-0.2.6-linux-arm64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.6/opencrawl-local-claude-code-0.2.6-linux-arm64.json",
+          "sha256": "8e4bf38140a3184ec715b4130c4ac1e6d64388262c1eb801b5576babb998bfbd",
+          "metadataSha256": "42ed429db9a4fd3e7e8a7e9b5a3e3703cd0c7e140e072de5450717bded557734"
         },
         "linux-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.2/opencrawl-local-claude-code-0.2.2-linux-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.2/opencrawl-local-claude-code-0.2.2-linux-x64.json",
-          "sha256": "36fb232ad9f23bcdf5232d8fd58f997dd6da4ecf76b261a4b4e799e853205e21",
-          "metadataSha256": "26a45dcaefa865e6e314b307db7debc14aabc52d1665acaba376a4757818173d"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.6/opencrawl-local-claude-code-0.2.6-linux-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.6/opencrawl-local-claude-code-0.2.6-linux-x64.json",
+          "sha256": "e6fd669914771e3b1a52caaf88b87a46c499af48527b5a1f861c6952a9290e32",
+          "metadataSha256": "f09ed1be148afafcb8e842e44f6361247369c45b48923ccf3477fcbebdb87591"
         },
         "win32-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.2/opencrawl-local-claude-code-0.2.2-win32-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.2/opencrawl-local-claude-code-0.2.2-win32-x64.json",
-          "sha256": "e5187e716917d9a5b479b5f0b6fda148aec540428b6a5e1454d0d4534c0ffb73",
-          "metadataSha256": "ac8a0e7d9c3ca6e94ff7dbdc937f0921014ab46cbe0e34df6f12b07bf5ad25a9"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.6/opencrawl-local-claude-code-0.2.6-win32-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-claude-code-v0.2.6/opencrawl-local-claude-code-0.2.6-win32-x64.json",
+          "sha256": "53ba09dd41d8da9674836d1195ab7f8a41a306b865ee152a783364e16b5313cd",
+          "metadataSha256": "daef5a55561196af0938bbc072f193b703be527a51ad2a00536c5e1a64a92c31"
         }
       },
-      "ref": "51004a8e68644af00ecf4cf56ec8bbea9fd15ee3",
+      "ref": "335991acf5e23c072b9874aa4d486fd82d3b37e2",
       "memoryImportSkill": true,
-      "listingIcon": true
+      "listingIcon": true,
+      "continueSkill": true
     },
     {
       "harness": "codex",
       "name": "opencrawl-local-codex",
       "path": "local/codex",
-      "version": "0.2.3",
+      "version": "0.2.6",
       "capabilities": "capabilities.json",
       "captureAvailable": true,
       "daemonHandoff": true,
       "minimumHarnessVersion": "0.166.0",
       "archives": {
         "darwin-arm64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.3/opencrawl-local-codex-0.2.3-darwin-arm64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.3/opencrawl-local-codex-0.2.3-darwin-arm64.json",
-          "sha256": "2f2610fe967f3a8cc3f081625dc93364bd2e18669cea628b7d4b7ea85031bda7",
-          "metadataSha256": "50df0063953200e2469e50f68dbdf95a035f49705adbde633a923938f44d556a"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.6/opencrawl-local-codex-0.2.6-darwin-arm64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.6/opencrawl-local-codex-0.2.6-darwin-arm64.json",
+          "sha256": "75dd39591db3f630c23a1345f8ded639b0487c29d12902fd4fabbd45290d0634",
+          "metadataSha256": "e0407dbda7c26366a051e49cd43783875b6496a16c27504645e51924e509c04d"
         },
         "darwin-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.3/opencrawl-local-codex-0.2.3-darwin-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.3/opencrawl-local-codex-0.2.3-darwin-x64.json",
-          "sha256": "4903aa1217be7f7ea1f7e2bab8da5b324112c9c89c134e80b215c249ffff5108",
-          "metadataSha256": "8b4a663bde2ef845e787e57dd1200d50fcee44bd191e06ce0066afe5e7c02e9d"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.6/opencrawl-local-codex-0.2.6-darwin-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.6/opencrawl-local-codex-0.2.6-darwin-x64.json",
+          "sha256": "99c5a5e4095961fdad5f49efa4d77879a11aa83717164bcc049cf6f311eeec8c",
+          "metadataSha256": "5174dcf044b841faa2602af2bc9617aba7d14b1a6d777c6bf4454251f42897fb"
         },
         "linux-arm64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.3/opencrawl-local-codex-0.2.3-linux-arm64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.3/opencrawl-local-codex-0.2.3-linux-arm64.json",
-          "sha256": "3e7edc4fbd53fcff47699b6f96f66e9ae791974c5ce9429b20ad277f9dfdebbe",
-          "metadataSha256": "0ff958c0df3f295ba9ff963183e4a5eceada67cb9e14d931ee0eef2bdc402de4"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.6/opencrawl-local-codex-0.2.6-linux-arm64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.6/opencrawl-local-codex-0.2.6-linux-arm64.json",
+          "sha256": "6d12723d8ae5f49cbe558517d0e228bad5217edc00dfd39438677ad59bc06dbf",
+          "metadataSha256": "53524106ded652c1133533986df045deaa19446fb773c99abf5e83f8f6beb022"
         },
         "linux-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.3/opencrawl-local-codex-0.2.3-linux-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.3/opencrawl-local-codex-0.2.3-linux-x64.json",
-          "sha256": "97de43711f7d7582c13122f7b49f059df949714adf6aa4a4e000d82b57d45592",
-          "metadataSha256": "6c7cbb28c3aa8212e49e2da58c9ade8ae9c444e4c2001d49d1d316e082908566"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.6/opencrawl-local-codex-0.2.6-linux-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.6/opencrawl-local-codex-0.2.6-linux-x64.json",
+          "sha256": "01f389bfc1ed3095f5527bb4fb0e27a4ae9d35019a088526b82662630d44d1d2",
+          "metadataSha256": "55efb2ea0886bcfa8b83d5480170491a49fc73f909871bbe9a683189218ce2a8"
         },
         "win32-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.3/opencrawl-local-codex-0.2.3-win32-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.3/opencrawl-local-codex-0.2.3-win32-x64.json",
-          "sha256": "74b89365985d53d08a0ae35820b6ac534424d0253dc7949d5579e2aa1e01662d",
-          "metadataSha256": "081146fa4329d8de325f692604797f34944f6dd5447965644ba84a9db229909e"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.6/opencrawl-local-codex-0.2.6-win32-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-codex-v0.2.6/opencrawl-local-codex-0.2.6-win32-x64.json",
+          "sha256": "f14407bb4445612f5825611ce344e60ead90b4ea9f2718da7b32c45d66725f23",
+          "metadataSha256": "385f1eeac6a3d9a929c1c0cee13729ff50e920bb492b8d6ec93458be92aa9acf"
         }
       },
-      "ref": "9b01292edb9297e5ab81df6e47a3bc8a133f4a7d",
+      "ref": "335991acf5e23c072b9874aa4d486fd82d3b37e2",
       "memoryImportSkill": true,
-      "listingIcon": true
+      "listingIcon": true,
+      "continueSkill": true
     },
     {
       "harness": "cursor",
       "name": "opencrawl-local-cursor",
       "path": "local/cursor",
-      "version": "0.2.2",
+      "version": "0.2.6",
       "capabilities": "capabilities.json",
       "captureAvailable": true,
       "daemonHandoff": true,
       "minimumHarnessVersion": "2026.11.17-f532c45",
       "archives": {
         "darwin-arm64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.2/opencrawl-local-cursor-0.2.2-darwin-arm64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.2/opencrawl-local-cursor-0.2.2-darwin-arm64.json",
-          "sha256": "c7ec0918cec9d2dd7ba9baba9d015245e5ab12c5425153e714b2f78732821df5",
-          "metadataSha256": "af6f8ee2abf8699eebb948690e8befbd40aa5d9b6e153b0a4150525702b6a65d"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.6/opencrawl-local-cursor-0.2.6-darwin-arm64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.6/opencrawl-local-cursor-0.2.6-darwin-arm64.json",
+          "sha256": "80db756bcbda8f84b38950e9b89ce9c38f352006355e3bf19b965daa5aead290",
+          "metadataSha256": "84e720eb3b41b818395134783004c4f0fc516b5aa51ab010ac4a6649ff3e9f1d"
         },
         "darwin-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.2/opencrawl-local-cursor-0.2.2-darwin-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.2/opencrawl-local-cursor-0.2.2-darwin-x64.json",
-          "sha256": "be18c1fed01447c2e3460ebcd225b878a6f973bec92375b72f31356f8cdd563a",
-          "metadataSha256": "2be1cc615d38e130822fa867381f020c2efe4f295464e18ff1007d4732ef40ae"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.6/opencrawl-local-cursor-0.2.6-darwin-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.6/opencrawl-local-cursor-0.2.6-darwin-x64.json",
+          "sha256": "3ffc481d10e2701f9dbbed42ccaf30ff62192dceec86f485c56c5ffee3911240",
+          "metadataSha256": "5df7183564269eb9c53f7a7aa478b639dc66a37c373ac83df99d1c5efe0f773d"
         },
         "linux-arm64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.2/opencrawl-local-cursor-0.2.2-linux-arm64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.2/opencrawl-local-cursor-0.2.2-linux-arm64.json",
-          "sha256": "5ea783d8d757446564f1adf052f21f927f7e6564db827643c3978216c3916f6c",
-          "metadataSha256": "cecd8971e4893df8edeb8f95aa81a708fb74befecc72e97e9f7c06ff24424d8e"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.6/opencrawl-local-cursor-0.2.6-linux-arm64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.6/opencrawl-local-cursor-0.2.6-linux-arm64.json",
+          "sha256": "98408d90be4d25a9e2b3765bb0f9099c0f40bf1f62c64ded9f1738d3ffa023ad",
+          "metadataSha256": "4ef8fb565a1e19bc6fa8f4b6af38ef2b5b0f171dcbe75c35cdb9c08be7270718"
         },
         "linux-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.2/opencrawl-local-cursor-0.2.2-linux-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.2/opencrawl-local-cursor-0.2.2-linux-x64.json",
-          "sha256": "8eee1def29336087cc87130e8b3929d6b5cdfd9bd44be4e66943d5d5da3e9b45",
-          "metadataSha256": "84b9575cd854c344a6587d257bd41185a07e870cd9b2a0680684814050a75714"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.6/opencrawl-local-cursor-0.2.6-linux-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.6/opencrawl-local-cursor-0.2.6-linux-x64.json",
+          "sha256": "860f6571d753d1896c7e3b5a2b5012244dd9981dfa78063c4d88861f5034391c",
+          "metadataSha256": "8d9e0472d59011fd62410464b12be51b380b70234876b300960f7e2c22635305"
         },
         "win32-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.2/opencrawl-local-cursor-0.2.2-win32-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.2/opencrawl-local-cursor-0.2.2-win32-x64.json",
-          "sha256": "a285f42cb4154efc5a47fff313a0759b9c0d0053b4b5eda2ef2309b915138abb",
-          "metadataSha256": "509cf6d761343b9a9351a1d4dcde755581bc0cebd6f8c5e417a178bd9a4abdc6"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.6/opencrawl-local-cursor-0.2.6-win32-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-cursor-v0.2.6/opencrawl-local-cursor-0.2.6-win32-x64.json",
+          "sha256": "b0f5f9f0df174af12dd63df74d26c6acac8ca6b59401ac75e14228c5bc50697b",
+          "metadataSha256": "ad5fc87627d76558793c84e1ef8fefb6f4d4f5aeaae44bf1b445bad672f6525b"
         }
       },
-      "ref": "51004a8e68644af00ecf4cf56ec8bbea9fd15ee3",
+      "ref": "335991acf5e23c072b9874aa4d486fd82d3b37e2",
       "memoryImportSkill": true,
-      "listingIcon": true
+      "listingIcon": true,
+      "continueSkill": true
     },
     {
       "harness": "antigravity",
       "name": "opencrawl-local-antigravity",
       "path": "local/antigravity",
-      "version": "0.2.2",
+      "version": "0.2.6",
       "capabilities": "capabilities.json",
       "captureAvailable": true,
       "daemonHandoff": true,
       "minimumHarnessVersion": "1.5.9",
       "archives": {
         "darwin-arm64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.2/opencrawl-local-antigravity-0.2.2-darwin-arm64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.2/opencrawl-local-antigravity-0.2.2-darwin-arm64.json",
-          "sha256": "cd4c7655519a8177055454ccb4f7f869066e44273932df11b9a5c827859791a5",
-          "metadataSha256": "7ec378f64611f3d2fa93b9a8f0a1705c478bb664e2a1e265c8111143201677d2"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.6/opencrawl-local-antigravity-0.2.6-darwin-arm64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.6/opencrawl-local-antigravity-0.2.6-darwin-arm64.json",
+          "sha256": "07dce23e97cd36167589dd39c4c59490644235697197d782a6b2d267a178e209",
+          "metadataSha256": "10a7d6dffab55745ab8e25877b6f58bc63e6cad83e1df7a6d630acd5091bf8f7"
         },
         "darwin-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.2/opencrawl-local-antigravity-0.2.2-darwin-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.2/opencrawl-local-antigravity-0.2.2-darwin-x64.json",
-          "sha256": "b825c19558644449fdc89e0dc9eee1f07dad0bffb462a9dfda9db90e90133fbb",
-          "metadataSha256": "92f669579b6740b4335823ed6c981fa1d2017dfbae6b0fec0bb5dee68b930cae"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.6/opencrawl-local-antigravity-0.2.6-darwin-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.6/opencrawl-local-antigravity-0.2.6-darwin-x64.json",
+          "sha256": "db1d4fba943c6b236b23df4c142f02e4797318d69aa1faad3a2b4ea5e617a096",
+          "metadataSha256": "fd42b91bafca4108af038281922676a8629c2dd9d2300a854d81ac2996ca14d0"
         },
         "linux-arm64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.2/opencrawl-local-antigravity-0.2.2-linux-arm64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.2/opencrawl-local-antigravity-0.2.2-linux-arm64.json",
-          "sha256": "fc992c26d1cb220037e9edca7f73db4f85dd665499dc2483057fca15dfb2ede8",
-          "metadataSha256": "9d44d5818b00061b4c91b4653762c7c4169ac49f843705803152aecbd42ee0f3"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.6/opencrawl-local-antigravity-0.2.6-linux-arm64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.6/opencrawl-local-antigravity-0.2.6-linux-arm64.json",
+          "sha256": "a93089b0a97c05e6f2e64605611bb3a48a402e4f6317bfe95fbe412c06b82af3",
+          "metadataSha256": "056774aecd7e2b0b2a84fbada56a34c619cc33d0c4003c855498edbacaab49a0"
         },
         "linux-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.2/opencrawl-local-antigravity-0.2.2-linux-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.2/opencrawl-local-antigravity-0.2.2-linux-x64.json",
-          "sha256": "6c12ba5658eb0919113c79898071dc4795b5770fbafe504f3cacbd38635d294f",
-          "metadataSha256": "f9617277ac116e80dd08fe57bcfee271c805a91db439599f66fbe9d9381215f8"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.6/opencrawl-local-antigravity-0.2.6-linux-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.6/opencrawl-local-antigravity-0.2.6-linux-x64.json",
+          "sha256": "4ec4ec97ef607d16fe919db91ba7cddc625bfc624198bf3ea0fb29fe0af10a8a",
+          "metadataSha256": "a18cd8a18680bbd87c5213fff451dd13889e1bc9ac09b6f6bafbf92cc5d1d1fe"
         },
         "win32-x64": {
-          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.2/opencrawl-local-antigravity-0.2.2-win32-x64.zip",
-          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.2/opencrawl-local-antigravity-0.2.2-win32-x64.json",
-          "sha256": "a47049a03bc86f2366756bd7add52ee56bbafee59dc27ccf3eabd4ac607cb3eb",
-          "metadataSha256": "4657512f959ceb6946f8ec4efa89f1042dbe2a23c57d31ce832db1bb1a64d1fe"
+          "url": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.6/opencrawl-local-antigravity-0.2.6-win32-x64.zip",
+          "metadataUrl": "https://github.com/getopencrawl/opencrawl-plugins/releases/download/local-antigravity-v0.2.6/opencrawl-local-antigravity-0.2.6-win32-x64.json",
+          "sha256": "a80eef717ce34672b5aade0a0d1532c2baef321b80979a340ed195d2e1f8091f",
+          "metadataSha256": "5e40317cfd7cb93d51eee99cc27bac7ce435013a2247b678193811ac3c125d7d"
         }
       },
-      "ref": "51004a8e68644af00ecf4cf56ec8bbea9fd15ee3",
+      "ref": "335991acf5e23c072b9874aa4d486fd82d3b37e2",
       "memoryImportSkill": true,
-      "listingIcon": true
+      "listingIcon": true,
+      "continueSkill": true
     }
   ]
 };
